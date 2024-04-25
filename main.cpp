@@ -1,59 +1,13 @@
 #include <iostream>
 #include <list>
+#include "astronauta.h"
+#include "voo.h"
 
 using namespace std;
 
+int main() {
+    list<Astronauta*> todos;
 
-class Astronauta {
-
-public:
-    string Nome;
-    string Cpf;
-    int Idade;
-    bool Disponivel;
-    bool Estado;
-    list<string> Historico;
-    list<string> Escala;
-
-    // construtor 
-    Astronauta(string nome, string cpf, int idade){
-        Nome = nome;
-        Cpf = cpf;
-        Idade = idade;
-        this->Disponivel = true;
-        this->Estado = true;
-
-    }
-};
-
-class Voo {
-    public:
-    int Codigo;
-    list<Astronauta> Passageiros;
-    string condicao; // (planejado, execucao, finalizado)
-    bool finalizada;       
-
-    // construtor
-    Voo(int codigo, list<Astronauta> passageiros){
-        Codigo = codigo;
-        Passageiros = passageiros;
-        this->condicao = "planejado";
-        this->finalizada = false;
-
-    }
-    // construtor 2
-    Voo(int codigo){
-        Codigo = codigo;
-        this->condicao = "planejado";
-        this->finalizada = false;
-    }
-
-};
-
-int main(){
-    
-    list<Astronauta> todos;
-   
     Astronauta astro1("Dinorah", "689518225", 20);
 
     cout << "Nome: " << astro1.Nome << endl;
@@ -62,23 +16,27 @@ int main(){
     cout << "o astronauta esta vivo? " << astro1.Estado << endl;
     cout << "o astronauta esta disponivel? " << astro1.Disponivel << endl;
 
-    
     Voo voo1(5001);
 
     cout << "Codigo: " << voo1.Codigo << endl;
-    cout << "tamanho da tripulacao: "<<voo1.Passageiros.size() << endl;
+    cout << "tamanho da tripulacao: " << voo1.Passageiros.size() << endl;
 
-    voo1.Passageiros.push_back(astro1);
+    voo1.Passageiros.push_back(&astro1); // Passando o endereço de astro1
 
-    cout << "tamanho da tripulacao: "<<voo1.Passageiros.size() << endl;
-    //Voo voo2(5002, todos);
+    cout << "tamanho da tripulacao: " << voo1.Passageiros.size() << endl;
 
     // listando a tripulacao de um voo
-    for (Astronauta i : voo1.Passageiros)
-    {
-        cout << "tripulacao: " << i.Nome << endl;
-        
+    for (Astronauta* i : voo1.Passageiros) { // Iterando sobre ponteiros
+        cout << "tripulacao: " << i->Nome << endl; // 
     }
+
+    voo1.lanca();
+    cout << "o astronauta esta vivo? " << astro1.Estado << endl;
+    cout << "o astronauta esta disponivel? " << astro1.Disponivel << endl;
+    voo1.explodir();
+    cout << "o astronauta esta vivo? " << astro1.Estado << endl;
+    cout << "o astronauta esta disponivel? " << astro1.Disponivel << endl;
+    cout << voo1.condicao << endl;
 
    list<string> menu = {"Menu: ", "1 - Cadastrar Astronauta", "2 - Cadastrar Voo", "3 - Adicionar Astronaura em voo", "4 - Remover Astronauta de um voo", "5 - Lançar um voo", "6 - Explodir voo","7 - Sair"};
 
@@ -145,6 +103,5 @@ int main(){
         
     }
     */
-
-
-}
+    return 0;
+};

@@ -1,0 +1,11 @@
+astronauta.o: astronauta.cpp
+	g++ -c astronauta.cpp
+
+voo.o: voo.cpp
+	g++ -c voo.cpp
+
+executar: main.cpp astronauta.o voo.o 
+	g++ main.cpp astronauta.cpp voo.cpp -o final
+
+limpar:
+	rm *.o final
