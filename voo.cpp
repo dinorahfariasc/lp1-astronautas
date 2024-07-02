@@ -20,8 +20,8 @@ Voo::Voo(int codigo) {
 void Voo::lancar() {
    if (condicao == "planejado"){
       for (auto& astronauta : Passageiros) {
-          astronauta->Estado = false;
-          astronauta->Disponivel = true;
+          astronauta->Estado = true;
+          astronauta->Disponivel = false;
       }
       condicao = "lancado";
     }
@@ -43,12 +43,13 @@ void Voo::explodir() {
 
 
 void Voo::pousar(){
-    if (condicao == "finalizado"){
+    if (condicao == "lancado"){
       for (auto& astronauta : Passageiros) {
           astronauta->Estado = true;
           astronauta->Disponivel = true;
       }
       condicao = "finalizado com sucesso";
+      finalizada = true;
     }
     else {
       cout<< "voo nao lancado ou nao disponivel! nao pode pousar." << endl;
@@ -78,9 +79,9 @@ void Voo::passageiros() {
     cout << "Lista de passageiros do voo: " << Codigo << endl; 
     for (const auto& astro : Passageiros) { 
         cout << "Nome: " << astro->Nome << ", CPF: " << astro->Cpf << ", Idade: " << astro->Idade;
-        cout << ", Disponível: " << astro->Disponivel << ", Está vivo? " << astro->Estado  << endl;
+        cout << ", Disponível: " << (astro->Disponivel ? "Sim":"Nao" ) << ", Está vivo? " << (astro->Estado ? "Sim":"Nao")  << endl;
     }
-    cout << "condicao do voo: " << condicao << endl;
-    cout << "finalizado? " << finalizada << endl;
+    cout << "Condicao do voo: " << condicao << endl;
+    cout << "Finalizado? " << (finalizada ? "Sim":"Nao") << endl;
 }
 

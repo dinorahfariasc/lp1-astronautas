@@ -9,7 +9,7 @@ int main() {
     list<Astronauta> todos_astros;
     list<Voo> todos_voos;
 
-    list<string> menu = {"Menu: ", "1 - Cadastrar Astronauta", "2 - Cadastrar Voo", "3 - Adicionar Astronaura em voo", "4 - Remover Astronauta de um voo", "5 - Lançar um voo", "6 - Explodir voo","7  pousar","8 - mostrar todos os voos","9 - mostrar passageiros por voo","10 - mostrar passageiros mortos", "11 - sair" };
+    list<string> menu = {"--------------------------","Menu: ", "1 - Cadastrar Astronauta", "2 - Cadastrar Voo", "3 - Adicionar Astronaura em voo", "4 - Remover Astronauta de um voo", "5 - Lançar um voo", "6 - Explodir voo","7 - Pousar","8 - Mostrar todos os voos","9 - Mostrar passageiros por voo","10 - Mostrar passageiros mortos", "11 - Sair", "--------------------------",};
 
     cout<< "teste"<< endl;
     int x = 0;
@@ -23,15 +23,27 @@ int main() {
         }
         cin >> opcao;
         
-        if(opcao == 1){
-            cout << "Digite o nome do astronauta: ";
-            string nome;
-            cin >> nome;
+        if (opcao == 1) {
+        cout << "Digite o nome do astronauta: ";
+        string nome;
+        cin >> nome;
 
-            cout << "Digite o cpf do astronauta: ";
-            string cpf;
-            cin >> cpf;
+        cout << "Digite o cpf do astronauta: ";
+        string cpf;
+        cin >> cpf;
 
+        // Verificar se o CPF já existe
+        bool cpfExiste = false;
+        for (const auto& astro : todos_astros) {
+            if (astro.Cpf == cpf) {
+                cpfExiste = true;
+                break;
+            }
+        }
+
+        if (cpfExiste) {
+            cout << "Ja existe um astronauta com esse CPF." << endl;
+        } else {
             cout << "Digite a idade do astronauta: ";
             int idade;
             cin >> idade;
@@ -39,17 +51,29 @@ int main() {
             Astronauta astro(nome, cpf, idade);
             todos_astros.push_back(astro);
         }
+    }
 
         else if(opcao == 2){
             cout << "Digite o codigo do voo: ";
             int codigo;
             cin >> codigo;
+            
+            for(auto& voo : todos_voos){
+                if (codigo == voo.Codigo){
+                  cout << "ja existe um voo com esse codigo"<< endl;
+                  break;
+              }
+              else {
+                  Voo voo(codigo);
+                  todos_voos.push_back(voo);
+                  cout<< "voo criado com sucesso"<< endl;
+              }
+            }
 
-            Voo voo(codigo);
-            todos_voos.push_back(voo);
+            
         }
         else if (opcao == 3 || opcao == 4) {
-            cout << "Digite o codigo do voo: ";
+            cout << "Digite o codigo do voo: "<< endl;
             int codigo;
             cin >> codigo;
 
@@ -133,14 +157,30 @@ int main() {
               }
         }
         
-        else if(opcao == 7){
-           
+        else if(opcao == 7){ cout << "Digite o codigo do voo: ";
+            int codigo;
+            cin >> codigo;
+
+            // Verifica se o voo está planejado 
+            bool vooEncontrado = false;
+            for (auto& voo : todos_voos) {
+                if (voo.Codigo == codigo) {
+                    vooEncontrado = true;
+                    voo.pousar();
+                    cout << "pousado com sucesso! " << endl;
+                    break;
+                  }
+                }
+
+              if (!vooEncontrado) {
+                  cout << "Voo não encontrado " << endl;
+              }
         }
         
         else if(opcao == 8){
-           cout<< "voos disponiveis" << endl;
+           cout<< "voos" << endl;
            for(auto& voo : todos_voos){
-            cout << voo.Codigo << voo.condicao << " " <<voo.finalizada << endl;
+            cout << voo.Codigo << " - "<< voo.condicao << " " << endl;
            }
         }
         
@@ -165,7 +205,7 @@ int main() {
         }
         
         else if(opcao == 10){
-          cout << "passageiros que foram de base" << endl;
+          cout << "Passageiros que foram de base" << endl;
           for(auto& astro : todos_astros){
               if(astro.Estado == false){
                 cout << astro.Nome << " "<<astro.Cpf << endl;
