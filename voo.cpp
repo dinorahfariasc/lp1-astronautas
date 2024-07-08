@@ -17,19 +17,30 @@ Voo::Voo(int codigo) {
     finalizada = false;
 }
 
+// so pode lancar se todos astronautas estiverem disponiveis
 void Voo::lancar() {
-   if (condicao == "planejado"){
-      for (auto& astronauta : Passageiros) {
-          astronauta->Estado = true;
-          astronauta->Disponivel = false;
-      }
-      condicao = "lancado";
-    }
-    else {
-      cout<< "voo nao lancado ou nao disponivel! nao pode ser explodido." << endl;
-    }
-}
+    if (condicao == "planejado") {
+        bool todosDisponiveis = true;
+        
+        for (auto& astronauta : Passageiros) {
+            if (!astronauta->Disponivel) {
+                todosDisponiveis = false;
+                break;
+            }
+        }
 
+        if (todosDisponiveis) {
+            for (auto& astronauta : Passageiros) {
+                astronauta->Disponivel = false;
+                astronauta->adicionarVoo(Codigo);
+            }
+            condicao = "lancado";
+            cout << "Voo lancado com sucesso!" << endl;
+        } else {
+            cout << "Voo nao pode ser lancado: todos os passageiros devem estar disponiveis e vivos." << endl;
+        }
+    } 
+}
 void Voo::explodir() {
     if (condicao == "lancado"){
       for (auto& astronauta : Passageiros) {
@@ -37,6 +48,10 @@ void Voo::explodir() {
           astronauta->Disponivel = false;
       }
       condicao = "finalizado sem sucesso";
+      cout << "voo explodido com sucesso"<< endl;
+    }
+    else {
+      cout << "voo nao lançado, nao pode ser explodido" << endl;
     }
 }
 
@@ -50,9 +65,10 @@ void Voo::pousar(){
       }
       condicao = "finalizado com sucesso";
       finalizada = true;
+      cout << "Voo finalizado com sucesso!"<< endl;
     }
-    else {
-      cout<< "voo nao lancado ou nao disponivel! nao pode pousar." << endl;
+     else {
+      cout << "voo nao lançado, nao pode pousar" << endl;
     }
 }
 

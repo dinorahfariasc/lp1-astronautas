@@ -11,11 +11,14 @@ public:
     int Idade;
     bool Disponivel;
     bool Estado;
-    std::list<std::string> Historico;  
-    std::list<std::string> Escala;
+    std::list<int> Historico;
 
     // Construtor 
     Astronauta(std::string nome, std::string cpf, int idade);
+    
+    // metodos
+    void adicionarVoo(int idVoo);
+    const std::list<int>& obterHist() const;
 };
 
 #endif

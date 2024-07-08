@@ -44,9 +44,12 @@ int main() {
         if (cpfExiste) {
             cout << "Ja existe um astronauta com esse CPF." << endl;
         } else {
+        
             cout << "Digite a idade do astronauta: ";
             int idade;
             cin >> idade;
+            
+            
 
             Astronauta astro(nome, cpf, idade);
             todos_astros.push_back(astro);
@@ -57,21 +60,24 @@ int main() {
             cout << "Digite o codigo do voo: ";
             int codigo;
             cin >> codigo;
-            
-            for(auto& voo : todos_voos){
-                if (codigo == voo.Codigo){
-                  cout << "ja existe um voo com esse codigo"<< endl;
-                  break;
-              }
-              else {
-                  Voo voo(codigo);
-                  todos_voos.push_back(voo);
-                  cout<< "voo criado com sucesso"<< endl;
-              }
+
+            bool codigoExiste = false;
+            for (const auto& voo : todos_voos) {
+                if (voo.Codigo == codigo) {
+                    codigoExiste = true;
+                    break;
+                }
             }
 
-            
+            if (codigoExiste) {
+                cout << "Ja existe um voo com esse codigo" << endl;
+            } else {
+                Voo voo(codigo);
+                todos_voos.push_back(voo);
+                cout << "Voo criado com sucesso" << endl;
+            }
         }
+
         else if (opcao == 3 || opcao == 4) {
             cout << "Digite o codigo do voo: "<< endl;
             int codigo;
@@ -112,7 +118,7 @@ int main() {
                 }
 
               if (!vooEncontrado) {
-                  cout << "Voo não encontrado ou não está planejado." << endl;
+                  cout << "Voo não encontrado ou não está planejado/disponivel." << endl;
               }
         }
     
@@ -120,61 +126,46 @@ int main() {
             cout << "Digite o codigo do voo: ";
             int codigo;
             cin >> codigo;
-
-            // Verifica se o voo está planejado 
-            bool vooEncontrado = false;
+            bool vooPronto = false;
+            // Verifica se o voo está planejado e se tem pelo menos um passageiro
             for (auto& voo : todos_voos) {
-                if (voo.Codigo == codigo) {
-                    vooEncontrado = true;
+                if (voo.Codigo == codigo && voo.Passageiros.size() > 0) {                  
                     voo.lancar();
+                    vooPronto = true;
                     break;
                   }
                 }
-
-              if (!vooEncontrado) {
-                  cout << "Voo não encontrado " << endl;
-              }
-            cout << "Voo lancado com sucesso!" << endl;
+              
+            if(!vooPronto) {
+              cout << "Voo não encontrado ou sem tripulação " << endl;
+            }
+              
         }
         else if(opcao == 6){
             cout << "Digite o codigo do voo: ";
             int codigo;
             cin >> codigo;
 
-            // Verifica se o voo está planejado 
-            bool vooEncontrado = false;
             for (auto& voo : todos_voos) {
-                if (voo.Codigo == codigo) {
-                    vooEncontrado = true;
+                if (voo.Codigo == codigo ) {
                     voo.explodir();
-                    cout<< "voo explodido com sucesso"<< endl;
                     break;
                   }
                 }
 
-              if (!vooEncontrado) {
-                  cout << "voo nao lancado ou nao disponivel! nao pode ser explodido. " << endl;
-              }
         }
         
         else if(opcao == 7){ cout << "Digite o codigo do voo: ";
             int codigo;
             cin >> codigo;
 
-            // Verifica se o voo está planejado 
-            bool vooEncontrado = false;
             for (auto& voo : todos_voos) {
                 if (voo.Codigo == codigo) {
-                    vooEncontrado = true;
                     voo.pousar();
-                    cout << "pousado com sucesso! " << endl;
                     break;
                   }
                 }
 
-              if (!vooEncontrado) {
-                  cout << "Voo não encontrado " << endl;
-              }
         }
         
         else if(opcao == 8){
@@ -205,15 +196,17 @@ int main() {
         }
         
         else if(opcao == 10){
-          cout << "Passageiros que foram de base" << endl;
-          for(auto& astro : todos_astros){
-              if(astro.Estado == false){
-                cout << astro.Nome << " "<<astro.Cpf << endl;
-              }
-          }
-           
+            cout << "Passageiros que foram de base:" << endl;
+            for (const auto& astro : todos_astros) {
+                if (!astro.Estado) {
+                    cout << astro.Nome << " " << astro.Cpf << endl;
+                    cout << "Voos que participou:" << endl;
+                    for (int idVoo : astro.obterHist()) {
+                        cout << "Codigo do Voo: " << idVoo << endl;
+                    }
+                }
+            }
         }
-        
         else if (opcao == 11){
             cout << "Saindo..." << endl;
             x = 1;
